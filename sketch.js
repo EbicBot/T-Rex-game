@@ -83,7 +83,8 @@ function draw() {
     }
     
      //jump when the space key is pressed
-    if(keyDown("space")) {
+    if(keyDown("space")&& trex.y>=159) {
+      jumpSound.play();
       trex.velocityY = -12 ;
     }
   
@@ -95,10 +96,13 @@ function draw() {
     //spawn obstacles
     spawnObstacles();
     
-    //End the game when trex is touching the obstacle
-    if(obstaclesGroup.isTouching(trex)){
-      gameState = END
-    }
+   if (score>0 && score%100 === 0){ 
+     checkPointSound.play(); 
+   } 
+     if(obstaclesGroup.isTouching(trex)){ 
+       dieSound.play(); 
+       gameState = END; 
+     }
   }
   
     else if(gameState === END) {
@@ -191,7 +195,11 @@ function reset(){
   cloudsGroup.destroyEach();
   
   trex.changeAnimation("running", trex_running);
-  
+  if(localStorage["HighestScore"]<score) {
+    localStorage["HighestScore"] = score;
+  }
   score = 0;
+  console.log(localStorage["HighestScore"]);
+  
   
 }
